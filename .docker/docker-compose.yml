@@ -10,7 +10,7 @@ services:
     environment:
       - POSTGRES_USER=superman
       - POSTGRES_PASSWORD=superman
-      - POSTGRES_DB=task
+      - POSTGRES_DB=postgres_db
     volumes:
       - ./postgres:/var/lib/postgresql/data
 
