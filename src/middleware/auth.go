@@ -37,7 +37,7 @@ func AuthMiddleware(c *fiber.Ctx) error {
 			return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
 		}
 		// Devolver la clave secreta para validar el token
-		return []byte(config.Config("SECRET_KEY").(string)), nil
+		return []byte(config.Config("SECRET_KEY")), nil
 	})
 
 	if err != nil {
