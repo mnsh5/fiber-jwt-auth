@@ -62,7 +62,7 @@ func SignIn(c *fiber.Ctx) error {
 		Name:     "token",
 		Value:    tokenString,
 		Path:     "/",
-		MaxAge:   60 * 60,
+		MaxAge:   24 * 60 * 60,
 		Secure:   false,
 		HTTPOnly: true,
 		Domain:   "localhost",
