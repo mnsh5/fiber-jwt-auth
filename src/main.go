@@ -13,10 +13,10 @@ func main() {
 
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173",
-		AllowMethods: "GET, POST, PUT, DELETE",
-		AllowHeaders: "Origin, Content-Type, Accept",
-		// AllowCredentials: true,
+		AllowOrigins:     "http://localhost:5173",
+		AllowMethods:     "GET, POST, PUT, DELETE",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowCredentials: true,
 	}))
 
 	log.Fatal(app.Listen(":3000"))
