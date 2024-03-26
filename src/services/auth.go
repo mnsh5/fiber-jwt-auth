@@ -36,5 +36,9 @@ func SignUp(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "error", "message": "Something went wrong"})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"user": &newUser}})
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"status":  "success",
+		"message": "User created successfully",
+		"data":    fiber.Map{"user": &newUser},
+	})
 }
