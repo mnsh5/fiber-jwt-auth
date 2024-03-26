@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/mnsh5/fiber-jwt-auth/src/database"
+	"github.com/mnsh5/fiber-jwt-auth/src/routes"
 )
 
 func main() {
@@ -19,5 +20,6 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	routes.SetupRoutes(app)
 	log.Fatal(app.Listen(":3000"))
 }
