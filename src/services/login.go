@@ -39,8 +39,8 @@ func SignIn(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid email or password"})
 	}
 
-	// Generar un nuevo par de claves Ed25519
-	tokenByte := jwt.New(&jwt.SigningMethodEd25519{})
+	// Generar un nuevo par de claves HS256
+	tokenByte := jwt.New(jwt.SigningMethodHS256)
 	now := time.Now().UTC()
 	claims := tokenByte.Claims.(jwt.MapClaims)
 	expDuration := time.Hour * 24
@@ -51,7 +51,8 @@ func SignIn(c *fiber.Ctx) error {
 	claims["nbf"] = now.Unix()
 
 	// Se firma el token con una secretkey
-	tokenString, err := tokenByte.SignedString([]byte(config.Config("SECRET_KEY")))
+	secretKey := []byte(config.Config("SECRET_KEY"))
+	tokenString, err := tokenByte.SignedString(secretKey)
 	if err != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
 			"status":  "fail",
