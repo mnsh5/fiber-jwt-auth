@@ -49,6 +49,7 @@ func SignIn(c *fiber.Ctx) error {
 	claims["iat"] = now.Unix()
 	claims["nbf"] = now.Unix()
 
+	// Se firma el token con una secretkey
 	tokenString, err := tokenByte.SignedString([]byte(config.Config("SECRET_KEY")))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid email or password"})
