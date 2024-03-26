@@ -22,10 +22,12 @@ func AuthMiddleware(c *fiber.Ctx) error {
 		tokenString = c.Cookies("token")
 	}
 
-	if tokenString != "" {
+	// Verificar si no hay ningún token presente
+	if tokenString == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "fail",
-			"message": "You are not logged in"})
+			"message": "You are not logged in",
+		})
 	}
 
 	// Verificar la validez del token
@@ -35,20 +37,22 @@ func AuthMiddleware(c *fiber.Ctx) error {
 			return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
 		}
 		// Devolver la clave secreta para validar el token
-		return []byte(config.Config("SECRET_KEY")), nil
+		return []byte(config.Config("SECRET_KEY").(string)), nil
 	})
 
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "fail",
-			"message": fmt.Sprintf("Invalid token: %v", err)})
+			"message": fmt.Sprintf("Invalid token: %v", err),
+		})
 	}
 
 	claims, ok := tokenByte.Claims.(jwt.MapClaims)
 	if !ok || !tokenByte.Valid {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "fail",
-			"message": "Invalid token"})
+			"message": "Invalid token",
+		})
 	}
 
 	var user models.User
@@ -58,7 +62,8 @@ func AuthMiddleware(c *fiber.Ctx) error {
 	if float64(user.ID) != claims["sub"] {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
 			"status":  "fail",
-			"message": "The user associated this token dosn't exists"})
+			"message": "The user associated this token dosn't exists",
+		})
 	}
 
 	c.Locals("user", &user)

@@ -18,5 +18,6 @@ func SetupRoutes(app *fiber.App) {
 	v1.Post("/signin", services.SignIn)
 	v1.Post("/logout", services.Logout)
 
+	v1.Get("/user", middleware.AuthMiddleware, services.User)
 	v1.Get("/users", middleware.AuthMiddleware, services.GetUsers)
 }
