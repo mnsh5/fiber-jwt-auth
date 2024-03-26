@@ -15,5 +15,5 @@ func SetupRoutes(app *fiber.App) {
 	// Rutas específicas de la versión 1 de la API
 	v1.Post("/signup", services.SignUp)
 	v1.Post("/signin", services.SignIn)
-	v1.Get("/logout", services.Logout)
+	v1.Post("/logout", services.Logout)
 }
