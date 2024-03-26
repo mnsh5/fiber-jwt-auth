@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/mnsh5/fiber-jwt-auth/src/middleware"
 	"github.com/mnsh5/fiber-jwt-auth/src/services"
 )
 
@@ -17,5 +18,5 @@ func SetupRoutes(app *fiber.App) {
 	v1.Post("/signin", services.SignIn)
 	v1.Post("/logout", services.Logout)
 
-	v1.Get("/users", services.GetUsers)
+	v1.Get("/users", middleware.AuthMiddleware, services.GetUsers)
 }
