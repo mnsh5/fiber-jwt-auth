@@ -30,10 +30,16 @@ func SignUp(c *fiber.Ctx) error {
 
 	result := db.Create(&newUser)
 	if result.Error != nil && strings.Contains(result.Error.Error(), "duplicate key value violates unique") {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"status": "fail", "message": "The user with the email already exists"})
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"status":  "fail",
+			"message": "The user with the email already exists",
+		})
 	}
 	if result.Error != nil {
-		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"status": "error", "message": "Something went wrong"})
+		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Something went wrong",
+		})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
