@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -45,15 +46,30 @@ func SignIn(c *fiber.Ctx) error {
 	expDuration := time.Hour * 24
 
 	claims["sub"] = user.ID
-	claims["exp"] = now.Add(time.Hour * 24).Unix()
+	claims["exp"] = now.Add(expDuration).Unix()
 	claims["iat"] = now.Unix()
 	claims["nbf"] = now.Unix()
 
 	// Se firma el token con una secretkey
 	tokenString, err := tokenByte.SignedString([]byte(config.Config("SECRET_KEY")))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "fail", "message": "Invalid email or password"})
+		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"status":  "fail",
+			"message": fmt.Sprintf("generating JWT Token failed: %v", err)})
 	}
 
-	return nil
+	c.Cookie(&fiber.Cookie{
+		Name:     "token",
+		Value:    tokenString,
+		Path:     "/",
+		MaxAge:   60 * 60,
+		Secure:   false,
+		HTTPOnly: true,
+		Domain:   "localhost",
+	})
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": "succes",
+		"token":  tokenString,
+	})
 }
